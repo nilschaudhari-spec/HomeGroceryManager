@@ -23,8 +23,15 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Prepare iOS Build Directories & Configure CocoaPods
+        run: |
+          mkdir -p build/ios/SourcePackages
+          flutter config --no-enable-swift-package-manager
+
       - name: Install Dependencies
-        run: flutter pub get
+        run: |
+          mkdir -p build/ios/SourcePackages
+          flutter pub get
 
       - name: Run Static Analysis & Tests
         run: |
