@@ -13,6 +13,22 @@ class GroceryItem {
   double get estimatedReorderQuantity => (minimumQuantity * 2 - quantity).clamp(0, double.infinity).toDouble();
 
   Map<String, Object?> toMap() => {'id':id,'name':name,'category':category,'quantity':quantity,'unit':unit,'minimum_quantity':minimumQuantity,'daily_consumption':dailyConsumption,'reminder_enabled':reminderEnabled?1:0,'reminder_hour':reminderHour,'reminder_minute':reminderMinute,'updated_at':updatedAt.toIso8601String(),'last_purchased_at':lastPurchasedAt?.toIso8601String(),'price_per_unit':pricePerUnit,'notes':notes,'on_shopping_list':onShoppingList?1:0};
-  factory GroceryItem.fromMap(Map<String,Object?> m) => GroceryItem(id:m['id'] as String,name:m['name'] as String,category:m['category'] as String,quantity:(m['quantity'] as num).toDouble(),unit:m['unit'] as String,minimumQuantity:(m['minimum_quantity'] as num).toDouble(),dailyConsumption:(m['daily_consumption'] as num).toDouble(),reminderEnabled:(m['reminder_enabled'] as int)==1,reminderHour:m['reminder_hour'] as int,reminderMinute:m['reminder_minute'] as int,updatedAt:DateTime.parse(m['updated_at'] as String),lastPurchasedAt:m['last_purchased_at']==null?null:DateTime.parse(m['last_purchased_at'] as String),pricePerUnit:(m['price_per_unit'] as num).toDouble(),notes:(m['notes'] as String?)??'',onShoppingList:(m['on_shopping_list'] as int)==1);
+  factory GroceryItem.fromMap(Map<String, Object?> m) => GroceryItem(
+    id: m['id'] as String? ?? '',
+    name: m['name'] as String? ?? '',
+    category: m['category'] as String? ?? 'Staples',
+    quantity: (m['quantity'] as num?)?.toDouble() ?? 0.0,
+    unit: m['unit'] as String? ?? 'pcs',
+    minimumQuantity: (m['minimum_quantity'] as num?)?.toDouble() ?? 0.0,
+    dailyConsumption: (m['daily_consumption'] as num?)?.toDouble() ?? 0.0,
+    reminderEnabled: (m['reminder_enabled'] as int?) == 1,
+    reminderHour: m['reminder_hour'] as int? ?? 9,
+    reminderMinute: m['reminder_minute'] as int? ?? 0,
+    updatedAt: m['updated_at'] != null ? DateTime.tryParse(m['updated_at'] as String) ?? DateTime.now() : DateTime.now(),
+    lastPurchasedAt: m['last_purchased_at'] == null ? null : DateTime.tryParse(m['last_purchased_at'] as String),
+    pricePerUnit: (m['price_per_unit'] as num?)?.toDouble() ?? 0.0,
+    notes: (m['notes'] as String?) ?? '',
+    onShoppingList: (m['on_shopping_list'] as int?) == 1,
+  );
   GroceryItem copyWith({String? name,String? category,double? quantity,String? unit,double? minimumQuantity,double? dailyConsumption,bool? reminderEnabled,int? reminderHour,int? reminderMinute,double? pricePerUnit,String? notes,bool? onShoppingList,DateTime? lastPurchasedAt}) => GroceryItem(id:id,name:name??this.name,category:category??this.category,quantity:quantity??this.quantity,unit:unit??this.unit,minimumQuantity:minimumQuantity??this.minimumQuantity,dailyConsumption:dailyConsumption??this.dailyConsumption,reminderEnabled:reminderEnabled??this.reminderEnabled,reminderHour:reminderHour??this.reminderHour,reminderMinute:reminderMinute??this.reminderMinute,updatedAt:DateTime.now(),lastPurchasedAt:lastPurchasedAt??this.lastPurchasedAt,pricePerUnit:pricePerUnit??this.pricePerUnit,notes:notes??this.notes,onShoppingList:onShoppingList??this.onShoppingList);
 }

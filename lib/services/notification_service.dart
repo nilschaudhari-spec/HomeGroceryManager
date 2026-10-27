@@ -15,25 +15,30 @@ class NotificationService {
   bool _ready = false;
 
   Future<void> initialize() async {
-    tzdata.initializeTimeZones();
     try {
-      final dynamic local = await FlutterTimezone.getLocalTimezone();
-      final String name = local is String ? local : (local as dynamic).name as String;
-      tz.setLocalLocation(tz.getLocation(name));
-    } catch (_) {
-      tz.setLocalLocation(tz.UTC);
-    }
+      tzdata.initializeTimeZones();
+      try {
+        final dynamic local = await FlutterTimezone.getLocalTimezone();
+        final String name = local is String ? local : (local as dynamic).name as String;
+        tz.setLocalLocation(tz.getLocation(name));
+      } catch (_) {
+        tz.setLocalLocation(tz.UTC);
+      }
 
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const ios = DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-    await _plugin.initialize(
-      const InitializationSettings(android: android, iOS: ios),
-    );
-    _ready = true;
+      const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const ios = DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      );
+      await _plugin.initialize(
+        const InitializationSettings(android: android, iOS: ios),
+      );
+      _ready = true;
+    } catch (e) {
+      debugPrint('[NotificationService] Initialization error: $e');
+      _ready = false;
+    }
   }
 
   Future<void> requestPermissions() async {

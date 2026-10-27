@@ -5,6 +5,7 @@ build/
 .flutter-plugins
 .flutter-plugins-dependencies
 android/.gradle/
+android/.kotlin/
 android/local.properties
 android/key.properties
 ios/Pods/

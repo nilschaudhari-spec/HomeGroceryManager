@@ -1,0 +1,57 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    name: Build iOS Release Package
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Run Static Analysis & Tests
+        run: |
+          flutter analyze
+          flutter test
+
+      - name: Build iOS Application (Release, No CodeSign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Package IPA and App Artifacts
+        run: |
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -r Runner.app Payload/
+          zip -r HomeGroceryManager-unsigned.ipa Payload
+          zip -r Runner-App-Bundle.zip Runner.app
+
+      - name: Upload Unsigned IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HomeGroceryManager-unsigned-ipa
+          path: build/ios/iphoneos/HomeGroceryManager-unsigned.ipa
+          retention-days: 14
+
+      - name: Upload Runner.app Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: Runner-App-Bundle
+          path: build/ios/iphoneos/Runner-App-Bundle.zip
+          retention-days: 14

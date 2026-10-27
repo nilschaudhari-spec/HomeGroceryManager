@@ -49,5 +49,9 @@
 	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Notifications remind you when household groceries may need reordering.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This application needs microphone access for voice search and speech-to-text grocery input.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This application needs speech recognition access to convert spoken words into grocery names and search text.</string>
 </dict>
 </plist>
